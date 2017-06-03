@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="iut2.lpmiaw.demonotessql" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Journal de bord</name>
+    <description>
+        Une application MVC en cordova+JQuery Mobile+Sqlite.
+    </description>
+    <author email="kevinlextrait@gmail.com" href="http://www-info.iut2.upmf-grenoble.fr/licence-pro-mi/">
+        Kevin Lextrait
+    </author>
+    <content src="index.html" />
+    <preference name="SplashMaintainAspectRatio" value="false" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <splash src="res/earth.png"/>
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+    <allow-intent href="geo:*" />
+    <plugin name="cordova-sqlite-storage" spec="~2.0.2" />
+</widget>

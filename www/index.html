@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <!-- On rajoute le CSS de JQuery Mobile -->
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css">
+        <title>DemoSql</title>
+    </head>
+    <body>
+        <!-- Code JS pour l'environnement (cordova et JQuery Mobile) -->
+        <script src="cordova.js"></script>
+        <script src="js/jquery-1.12.1.min.js"></script>
+        <script src="js/jquery.mobile-1.4.5.min.js"></script>
+        <!-- Code JS du Modèle -->
+        <script src="js/model.js"></script>        
+        <!-- Code JS du Contrôleur -->
+        <script src="js/controller.js"></script>
+        <!-- Code JS d'initialisation de l'application -->
+        <script src="js/index.js"></script>
+
+        <script src="js/fonctions.js"></script>
+
+        <!-- Fichiers HTML = PARTIE "VUE" de l'application                               -->
+        <!--   composée d'une suite  pages Jquery Mobile                                 -->
+        <!-- Le comportement de chaque page est géré par le controleur (événements JS)   --> 
+
+        <!--======== PAGE "vueChargement" - pour attendre que le périphérique soit prêt  ========-->
+        <div data-role="page" id="chargement">
+            <header id="Header">
+                <div data-role="header" data-position="fixed" data-id="monHeader" data-theme="b">
+                    <div data-role="navbar" data-theme="b">
+                        <button onclick="$.mobile.changePage('#accueil')"  class="ui-icon-home ui-btn-icon-left">
+                            Accueil
+                        </button>
+                        <button onclick="controller.addNote.init()"  class="ui-icon-plus ui-btn-icon-left">
+                            Ajout
+                        </button>
+                        <button onclick="$.mobile.changePage('#listNote')" class="ui-icon-bullets ui-btn-icon-left">
+                            Liste
+                        </button>
+                    </div>
+                </div>
+            </header>
+            <div data-role="main" class="ui-content">
+                <p>Chargement...</p>
+            </div>
+            <footer id="Footer">
+                <div data-role="footer" data-position="fixed" data-id="monFooter" data-theme="b">
+                    <h6>App MVC en Cordova+Sqlite</h6>
+                </div>
+            </footer>
+        </div>
+
+        <!--======== PAGE "accueil" (menu Ajouter/afficher") ========-->
+        <div data-role="page" id="accueil">
+            <div data-role="main" class="ui-content">
+                <div data-role="navbar" data-iconpos="left">
+                    <a data-icon="home">Accueil</a>
+                </div>
+                <div style="text-align: center">
+                    <h4>Une petite application Cordova pour enregistrer des notes dans une BD Sqlite.</h4>
+                    <p><img src="img/logo.png" /></p>
+                </div>
+            </div>
+        </div>
+
+        <!--======== PAGE "addNote" - Formulaire de saisie d'une note ========-->
+        <div data-role="page" id="addNote">
+            <div data-role="main" class="ui-content">
+                <div data-role="navbar" data-theme="b" data-iconpos="left">
+                    <a href="#" data-icon="plus">Nouvelle Note</a>
+                </div>
+                <input type="text" id="addNoteTitre" placeholder="Titre de la note" />
+                <textarea rows="5" id="addNoteTexte"  data-autogrow="false" placeholder="Texte de la note"></textarea>
+                <div data-role="navbar"  data-position="fixed">
+                    <button onclick="controller.addNote.save()">Enregistrer</button>
+                </div>
+                <div data-role="navbar"  data-position="fixed">
+                    <button onclick="controller.addNote.takePicture()">Prendre une photo</button>
+                </div>
+                <div data-role="navbar"  data-position="fixed">
+                    <button onclick="controller.addNote.importContact()">Importer contact</button>
+                </div>
+                <div data-role="navbar"  data-position="fixed">
+                    <button onclick="controller.addNote.creerContact()">Créer contact</button>
+                </div>
+                <form>
+                    <div class="ui-field-contain">
+                        <label for="contactRep">Contacts Télephone:</label>
+                        <select name="select-choice-9" multiple="multiple" data-native-menu="false" id="contactRep">
+                            <option value="">Contacts à ajouter</option>
+
+
+                        </select>
+
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+
+        <div data-role="page" id="contact">
+            <div data-role="main" class="ui-content">
+                <h3 class="ui-bar ui-bar-inherit">Contact</h3>
+                <input type="text" id="contactDisplayName"  placeholder="Nom" />
+                <input type="text" id="contactPhoneNumber"  placeholder="Tél" />
+                <a id="importButton" href="javascript:window.controller.contactController.pickContact()" style="text-decoration: none"><button>Récupérer un Contact du Tél</button></a>
+                <div data-role="navbar"  data-position="fixed">
+                    <button onclick="controller.contactController.insertContact()">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+
+        <!--======== PAGE "listNote" - Affiche la liste des notes  ========-->
+        <div data-role="page" id="listNote">
+            <div data-role="main" class="ui-content">
+                <div data-role="navbar" data-iconpos="left" >
+                    <a data-icon="bullets">Liste des Notes</a>
+                </div>
+                <div class="ui-mini"><i>Balayer une note pour la supprimer</i></div>
+                <ul data-role="listview" data-inset="true" id="listNoteContenu"></ul>
+            </div>           
+        </div>
+
+        <!--======== PAGE "oneNote" - affiche le détail d'une note ========-->
+        <div data-role="page" id="detailNote">
+            <div data-role="main" class="ui-content">
+                <div data-role="navbar" data-iconpos="left">
+                    <a href="#" data-icon="eye">Détail Note</a>
+                </div>
+                <p><b>Numéro : </b><span id="oneNoteId"></span></p>
+                <p><b>Titre : </b><span id="oneNoteTitre"></span></p>
+                <p><b>Texte  : </b><span id="oneNoteTexte"></span></p>
+                <p><b>Date  : </b><span id="oneNoteDate"></span></p>
+                <p><b>Contacts  : </b><ul id="oneNoteContacts"></ul></p>
+                <p><b>Position  : </b><ul id="oneNotePosition"></ul></p>
+
+            </div>
+
+            <button class="EditButton" onclick="controller.updateNote.edit(this.id)">Editer</button>
+
+            <div data-role="main" class="ui-content">
+                <div class="photosContenu"></div>
+            </div>
+        </div>
+
+        <!--======== PAGE "oneNote" - affiche le détail d'une note ========-->
+        <div data-role="page" id="updateNote">
+            <div data-role="main" class="ui-content">
+                <div data-role="navbar" data-iconpos="left">
+                    <a href="#" data-icon="eye">Détail Note</a>
+                </div>
+                <p><b>Titre : </b><input type="text" id="updateTitre"/></p>
+                <p><b>Texte  : </b><input type="text" id="updateTexte"/></p>
+                <p><b>Date  : </b><span id="Date"></span></p>
+                <p style="display: none" id="idNote"></p>
+            </div>
+
+            <button class="EditButton" onclick="controller.updateNote.save()">Enregistrer</button>
+            <div data-role="main" class="ui-content">
+                <div class="photosContenu"></div>
+            </div>
+        </div>
+
+        <!--======== PAGE "Erreur" ========-->
+        <div data-role="page" id="erreur">
+            <div data-role="main" class="ui-content">
+                <h1> Erreur : Base de Données Indisponible </h1>
+            </div>
+        </div>
+    </body>
+</html>
